@@ -19,6 +19,7 @@ public class Learner<T> {
         this.abstractObject = ao;
         this.alphabet = alpha;
         this.superTable = new Table();
+
         /*this.table = new LinkedList<>();
         this.closedRows = new LinkedList<>();
         this.tableClosed = false;
