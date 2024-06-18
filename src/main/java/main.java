@@ -1,7 +1,6 @@
 import angluin.Learner;
-import graph.*;
+import dummydata.DummyClass;
 import org.checkerframework.checker.units.qual.A;
-import trans.*;
 import angluin.AbstractObject;
 import java.io.*;
 
@@ -12,103 +11,53 @@ import java.net.URLClassLoader;
 import java.util.LinkedList;
 
 public class main {
-    public static void main(String[] args) throws IOException, ParseErrorException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-
-        /*boolean rewrite = true;
-        boolean bisim = true;
-        boolean fairSim = true;
-        Writer.Format format = Writer.Format.FSP;
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("LTL formula?> ");
-        String LTLin = in.readLine();
-        Graph<String> g = translate(LTLin, rewrite, bisim, fairSim);
-        Writer<String> w = Writer.getWriter (format, System.out);
-        Writer<String> a = Writer.getWriter (Writer.Format.SPIN, System.out);
-        w.write (g);
-        a.write (g);*/
+    public static void main(String[] args) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         URL myurl[] = { new URL("file:///C:/Users/morte/OneDrive/Documents/Skola/Thes/src/main/java/dummydata/")};
         URLClassLoader x = new URLClassLoader(myurl);
         Class loadedClass = x.loadClass("dummydata.DummyClass");
         Object instance = loadedClass.newInstance();
         Method methodIsEven = loadedClass.getMethod("isEven", String.class);
-        Method methodReplace = loadedClass.getMethod("replace", String.class);
-        Method methodMoreA = loadedClass.getMethod("moreA", String.class);
-        LinkedList<Character> alphabetEven = new LinkedList<Character>();
-        alphabetEven.add('a');
-        alphabetEven.add('b');
-        LinkedList<Character> alphabetReplace = new LinkedList<Character>();
-        alphabetReplace.add('1');
-        alphabetReplace.add('0');
-        LinkedList<Character> alphabetMoreA = new LinkedList<>();
-        alphabetMoreA.add('a');
-        alphabetMoreA.add('b');
-        //System.out.println(methodIsEven.invoke(instance, "haha"));
+        Method m_bIsSecondToLast = loadedClass.getMethod("bIsSecondToLast", String.class);
+        Method m_aIsMultipleof3 = loadedClass.getMethod("multipleOf3", String.class);
+        Method m_isNumber = loadedClass.getMethod("isNumber", String.class);
+        Method m_contains = loadedClass.getMethod("doubleAInString", String.class);
+        LinkedList<String> alphabetEven = new LinkedList<String>();
+        alphabetEven.add("a");
+        alphabetEven.add("b");
+        LinkedList<String> alphabetMoreA = new LinkedList<>();
+        alphabetMoreA.add("a");
+        alphabetMoreA.add("b");
+        LinkedList<String> alphabetMult3 = new LinkedList<>();
+        alphabetMult3.add("a");
+        alphabetMult3.add("b");
+        LinkedList<String> alphabetDigit = new LinkedList<>();
+        alphabetDigit.add(".");
+        alphabetDigit.add("0");
+        alphabetDigit.add("1");
+        //alphabetDigit.add("2");
+        //alphabetDigit.add("4");
+        //alphabetDigit.add("5");
+        //alphabetDigit.add("6");
+        //alphabetDigit.add("7");
+        //alphabetDigit.add("8");
+        //alphabetDigit.add("9");
+        //alphabetDigit.add(".");
+        LinkedList<String> alphabetABC = new LinkedList<>();
+        alphabetABC.add("a");
+        alphabetABC.add("b");
+        //alphabetABC.add("c");
         AbstractObject learnerIsEven = new AbstractObject(methodIsEven, instance);
-        AbstractObject learnerReplace = new AbstractObject(methodReplace, instance);
-        AbstractObject learnerMore = new AbstractObject(methodMoreA, instance);
-        //System.out.println(learnerIsEven.useMethod("knas"));
-        //System.out.println(learnerReplace.useMethod("101101"));
-        //Learner learnereven = new Learner(learnerIsEven, alphabetEven);
-        Learner learnerMoreA = new Learner(learnerMore, alphabetMoreA);
-        //Learner learnerrep = new Learner(learnerReplace, alphabetReplace);
-    }
+        AbstractObject ao_bIsSecondToLast = new AbstractObject(m_bIsSecondToLast, instance);
+        AbstractObject ao_multiple3 = new AbstractObject(m_aIsMultipleof3, instance);
+        AbstractObject ao_number = new AbstractObject(m_isNumber, instance);
+        AbstractObject ao_containsABC = new AbstractObject(m_contains, instance);
 
-    public static Graph<String> translate(String formula, boolean rewrite,
-                                          boolean bisim, boolean fair_sim) throws ParseErrorException {
-        //	System.out.println("Translating formula: " + formula);
-        // System.out.println();
-        return translate(Parser.parse (formula), rewrite, bisim, fair_sim);
-    }
-    public static <PropT> Graph<PropT> translate(Formula<PropT> formula,
-                                                 boolean rewrite, boolean bisim, boolean fair_sim) {
-        if (rewrite) {
-            formula = new Rewriter<PropT> (formula).rewrite();
-        }
-        Graph<PropT> gba = Translator.translate(formula);
-        printStats(gba, "Generalized buchi automaton generated");
-        gba = SuperSetReduction.reduce(gba);
-        printStats(gba, "Superset reduction");
-        Graph<PropT> ba = Degeneralize.degeneralize(gba);
-        printStats(ba, "Degeneralized buchi automaton generated");
-        ba = SCCReduction.reduce(ba);
-        printStats(ba, "Strongly connected component reduction");
-        if (bisim) {
-            ba = Simplify.simplify(ba);
-            printStats(ba, "Bisimulation applied");
-        }
-        if (fair_sim) {
-            ba = SFSReduction.reduce(ba);
-            printStats(ba, "Fair simulation applied");
-        }
-        reset_all_static();
-        return ba;
-    }
-    public static <PropT> Graph<PropT> translate(Formula<PropT> formula) {
-        return translate(formula, true, true, true);
-    }
+        //Learner l_bIsSecondToLast = new Learner(ao_bIsSecondToLast, alphabetMoreA);
+        //Learner isEven = new Learner(learnerIsEven,alphabetMoreA);
+        //Learner multi3 = new Learner(ao_multiple3, alphabetMult3);
+        Learner numb = new Learner(ao_number, alphabetDigit);
+        //Learner ABC = new Learner(ao_containsABC, alphabetABC);
 
-    public static Graph<String> translate(File file) throws ParseErrorException {
-        String formula = "";
-
-        try {
-            LineNumberReader f = new LineNumberReader(new FileReader(file));
-            formula = f.readLine().trim();
-            f.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        return translate(formula, true, true, true);
-    }
-    private static <PropT> void printStats(Graph<PropT> gba, String op) {
-        System.out.println("\n***********************");
-        System.out.println("\n" + op);
-        System.out.println("\t" + gba.getNodeCount() + " states "
-                + gba.getEdgeCount() + " transitions");
-    }
-    public static void reset_all_static() {
-        Formula.resetStatic();
     }
 }
