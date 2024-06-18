@@ -2,55 +2,88 @@ package dummydata;
 
 public class DummyClass {
 
-    public boolean moreA(String str){
-        StringBuilder sb = new StringBuilder(str);
-        if(sb.length() < 2){
+
+    public boolean bIsSecondToLast(String str){
+        //StringBuilder sb = new StringBuilder(str);
+        if(str.length() < 2){
             return false;
         }
-        /*int a = 0;
-        int b = 0;
-        while(!sb.isEmpty()){
-            if(sb.charAt(0) == 'a'){
-                a++;
-            }else{
-                b++;
-            }
-            sb.deleteCharAt(0);
-        }
-        return b > a;*/
-        return sb.charAt(sb.length()-2) == 'b';
+        return str.charAt(str.length()-2) == 'b';
+        //return sb.charAt(sb.length()-2) == 'b';
+    }
+
+    public boolean doubleAInString(String str){
+        int containsAA = str.indexOf("aa");
+        int notContainsBB = str.indexOf("bb");
+        return containsAA != -1 && notContainsBB == -1;
     }
 
     public boolean isEven(String str){
-        StringBuilder sb = new StringBuilder(str);
+        char[] chars = str.toCharArray();
         if(str.equals("")){
-            return false;
+            return true;
         }
         int a = 0;
         int b = 0;
-        while(!sb.isEmpty()){
-            if(sb.charAt(0) == 'a'){
+        for(char c : chars){
+            if(c == 'a'){
                 a++;
             }else{
                 b++;
             }
-            sb.deleteCharAt(0);
         }
-        return a == b;
+        return a%2==0 && b%2==0;
     }
-    public String replace(String str){
-        StringBuilder old = new StringBuilder(str);
-        StringBuilder newSB = new StringBuilder();
-        while(!old.isEmpty()){
-            Character bla = old.charAt(0);
-            Character etta = new Character('1');
-            Character nolla = new Character('0');
-            if(bla.equals(etta)){
-                newSB.append(0);
-            }else if(bla.equals(nolla)){
-                newSB.append(1);
-            }old.deleteCharAt(0);
+
+    public boolean multipleOf3(String str){
+        char[] chars = str.toCharArray();
+        int numberofAs = 0;
+        for(char c : chars){
+            if(c == 'a'){
+                numberofAs++;
+            }
         }
-        return newSB.toString();
+        return numberofAs % 3 == 0;
+    }
+
+    public static boolean isNumber(String str){
+        if(str.length() == 0){
+            return false;
+        }
+        char[] chars = str.toCharArray();
+        boolean hasDecimalPoint = false;
+        boolean lastWasDecimalPoint = false;
+        boolean startedWithNumber = false;
+        boolean lastWasZero = false;
+
+        for(char c : chars){
+            if(c == '.'){
+                if(hasDecimalPoint){
+                    return false;
+                }
+                hasDecimalPoint = true;
+                lastWasDecimalPoint = true;
+                lastWasZero = false;
+            }
+            else if(c == '0'){
+                if (lastWasZero && !hasDecimalPoint && !startedWithNumber){
+                    return false;
+                }
+                lastWasZero = true;
+                lastWasDecimalPoint = false;
+            }
+            else if(Character.isDigit(c)){
+                startedWithNumber = true;
+                lastWasDecimalPoint = false;
+                lastWasZero = false;
+            }
+            else{
+                return false;
+            }
+        }
+        if(lastWasDecimalPoint){
+            return false;
+        }
+        return !hasDecimalPoint || !lastWasZero;
     }
 }
